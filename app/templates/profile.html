@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="title">
+  Welcome, {{ current_user.Last_Name + ' ' + current_user.First_Name}}
+</h1>
+<p>This is your profile page.</p>
+<p>ID: {{current_user.StaffID}}</p>
+<p>First Name: {{current_user.First_Name}}</p>
+<p>Last Name: {{current_user.Last_Name}}</p>
+<p>Email: {{current_user.Email}}</p>
+<p>Roles: {% for role in current_user.roles %}{{role.name}} {% endfor %}</p>
+<p>Email Confirmed At: {{current_user.Email_Confirmed_At}}</p>
+<p>Last Login At: {{current_user.Last_Login}}</p>
+
+{% if current_user.is_authenticated %}
+{% for role in current_user.roles if role.name == 'admin' %}
+  <select name="choose_role" id="choose_role">
+    <option value="admin" >Admin</option>
+    <option value="staff">Staff</option>
+  </select>
+{% endfor %}
+{% endif %}
+
+
+<!-- <label for="">First Name: </label> -->
+<!-- <input type="text" name="first_name" id="first_name" value="{{current_user.First_Name}}"><br>
+<label for="">Last Name: </label>
+<input type="text" name="last_name" id="last_name" value="{{current_user.Last_Name}}"><br> -->
+
+<br><br><br>
+
+<p>Change Password</p>
+<form action="{{url_for('auth.change_password')}}" method="post">
+
+  <label for="new_password">New Password:</label>
+  <input type="password" name="new_password" id="new_password" value="" required><br>
+  <label for="confirm_password">Confirm Password:</label>
+  <input type="password" name="confirm_password" id="confirm_password" value="" required><br>
+  <label for="old_password">Old Password:</label>
+  <input type="password" name="old_password" id="old_password" value="" required><br>
+  <input type="submit" value="Submit">
+</form>
+
+<form action="{{url_for('auth.set_pins')}}" method="post">
+  <p>Set Pins</p>
+    <input type="text" style="display: none;" name='id' value="{{current_user.id }}" required><br>
+    <input type="number" name="pins" value="{{current_user.pins if current_user.pins else ''}}" max="6" required>
+    <input type="submit" value="Save">
+</form>
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+    
+        {{ messages[0] }}
+
+{% endif %}
+{% endwith %}
+{% endblock %}

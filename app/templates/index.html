@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Welcome, {{ current_user.Last_Name + ' ' + current_user.First_Name if current_user.is_authenticated else 'Guest' }}</h1>
+    <p>This is your index page.</p>
+  
+    <h3>Current User: {{ current_user.Email if current_user.is_authenticated else 'Guest' }}!</h3>
+    <b>Role</b>: 
+    {% for role in current_user.roles%}
+    {{role.name}}
+    {% endfor %} <br><br>
+
+    <p></p><a href="{{url_for('main.admin_page')}}">admin page</a> (Only Admin can access, otherwise will get error)</p>
+    <p></p><a href="{{url_for('main.role_management')}}">Roles Management page</a> (Only Admin can access, otherwise will get error)</p>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Role Managements</h3>
+<form action="{{url_for('main.role_management')}}" method="post">
+<table>
+    <tr>
+        <th>User</th>
+        <th>Admin</th>
+        <th>Staff</th>
+    </tr>
+
+    {% for user in users if not user == current_user%}
+    <tr>
+
+            <td>{{user.Last_Name}}
+                <input style="display: none;" type="text" name="user_id" id="" value="{{user.id}}">
+            </td>
+            <td><input type="checkbox" name="admin_roles" value="{{ user.id }}" {% for role in user.roles if 'admin' in role.name %}checked{% endfor %}></td>
+            <td><input type="checkbox" name="staff_roles" value="{{ user.id }}" {% for role in user.roles if 'staff' in role.name %}checked{% endfor %}></td>
+            
+        </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="submit">
+</form>
+{% endblock %}
