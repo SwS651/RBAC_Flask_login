@@ -80,6 +80,7 @@ from fpdf.enums import TableCellFillMode
 def generate_sales_pdf():
     # Instantiation of inherited class
     data = User.query.all()
+    person_name = ['Adam','Zach Posey','Alice Tan']
     # Extract column names from the SQLAlchemy model
     columns = [column.key for column in inspect(User).c]
     pdf = FPDF(orientation="P", unit="mm", format="A4")
@@ -88,32 +89,36 @@ def generate_sales_pdf():
     pdf.cell(40, 10, "SALES REPORT",align='CENTER', center=True)
     pdf.ln()
     pdf.set_y(22)
-    pdf.set_font("helvetica", size=8)
-    pdf.cell(40, 10, "SALES PERSON")
-    pdf.cell(40, 10, "DATE")
-    pdf.set_y(27)
-    pdf.cell(40, 10, "Zach Posey")
+    pdf.set_font("helvetica", size=8,style='B')
+    pdf.line(11, 28.5,34,28.5)
+    pdf.cell(40, 10, "SALES PERSON: ")
+    pdf.set_font(style='')
+    pdf.set_x(40)
+    for i ,name in enumerate(person_name):
+        pdf.set_xy(40,22+(5 * i))
+        pdf.cell(40, 10, name)
+    pdf.set_xy(80,22)
+    pdf.set_font(style='B')
+    pdf.line(81, 28.5,89.5,28.5)
+    pdf.cell(10, 10, "DATE: ")
     pdf.cell(40, 10, "11/30/24")
+    pdf.set_xy(90,19.5)
+    pdf.set_font(style='',size=5)
+    pdf.cell(40, 10, " DD  MM  YY")
     pdf.ln()
 
+
+    pdf.set_font("helvetica", size=8)
     pdf.set_xy(150,22)
-    # pdf.set_y(10)
-    pdf.cell(30, 10, "SALES AMOUNT")
-    pdf.cell(10, 10, "RM 3750.00")
+    pdf.cell(22, 10, "SALES QTY: ")
+    pdf.cell(20, 10, "30")
     pdf.ln()
     pdf.set_xy(150,27)
-    pdf.cell(30, 10, "SALES TAX")
-    pdf.cell(10, 10, "RM 227.00")
-    pdf.line(150, 34.5,198,34.5)
-    pdf.set_xy(150,34)
-    pdf.cell(30, 8, "SALES TOTAL")
-    pdf.cell(10, 8, "RM 4077.00")
-
-
+    pdf.cell(22, 8, "SALES TOTAL: ")
+    pdf.set_font("helvetica", size=8,style='B')
+    pdf.cell(22, 8, "RM 4077.00")
+   
     pdf.ln()
-    pdf.cell(40, 10, "Payment Type")
-    pdf.cell(40, 10, "Cash")
-
     pdf.ln()
     pdf.cell(40, 10, "ITEM DETAIL")
     pdf.ln()
@@ -121,27 +126,26 @@ def generate_sales_pdf():
 
     # Add table header
     pdf.set_fill_color(224, 235, 255)
-    # for column_name in columns:
-    #     pdf.cell(20, 10, column_name, border=1, fill=True)
-
     # Table Header
-    pdf.cell(30, 7, 'BarCode', border=1, fill=True,align='CENTER')
-    pdf.cell(50, 7, 'Nsme', border=1, fill=True,align='CENTER')
+    pdf.cell(25, 7, 'BarCode', border=1, fill=True,align='CENTER')
+    pdf.cell(40, 7, 'Name', border=1, fill=True,align='CENTER')
     pdf.cell(20, 7, 'Price', border=1, fill=True,align='CENTER')
     pdf.cell(20, 7, 'QTY', border=1, fill=True,align='CENTER')
+    pdf.cell(20, 7, 'Type', border=1, fill=True,align='CENTER')
     pdf.cell(20, 7, 'Amount', border=1, fill=True,align='CENTER')
-    pdf.cell(20, 7, 'Tax', border=1, fill=True,align='CENTER')
+    pdf.cell(20, 7, 'Discount', border=1, fill=True,align='CENTER')
     pdf.cell(23, 7, 'Total', border=1, fill=True,align='CENTER')
     pdf.ln()
 
     # Table data
-    pdf.cell(30, 7, '120331234', border=1,align='CENTER')
-    pdf.cell(50, 7, 'KitKat', border=1,)
-    pdf.cell(20, 7, '2.00', border=1,align='CENTER')
-    pdf.cell(20, 7, '3', border=1,align='CENTER')
-    pdf.cell(20, 7, '6.00', border=1,align='CENTER')
-    pdf.cell(20, 7, '00.00', border=1,align='CENTER')
-    pdf.cell(23, 7, '06.00', border=1,align='CENTER')
+    pdf.cell(25, 5, '120331234', border=1,align='CENTER')
+    pdf.cell(40, 5, 'KitKat', border=1,)
+    pdf.cell(20, 5, '2.00', border=1,align='CENTER')
+    pdf.cell(20, 5, '3', border=1,align='CENTER')
+    pdf.cell(20, 5, '6.00', border=1,align='CENTER')
+    pdf.cell(20, 5, 'Cash', border=1,align='CENTER')
+    pdf.cell(20, 5, '00.00', border=1,align='CENTER')
+    pdf.cell(23, 5, '06.00', border=1,align='CENTER')
 
     pdf.ln()
     pdf.ln()
